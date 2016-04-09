@@ -39,6 +39,9 @@ This would define two tasks `compile` & `test`. To execute those tasks run
 Scripts can be either Javascript files, shell scripts, binaries or anything
 else which is executable on your OS.
 
+Check the following repository for a basic example:<br />
+https://github.com/aureolacodes/npm-simply-build-example
+
 ## Configuration
 
 The following options can be added to your `package.json`:
