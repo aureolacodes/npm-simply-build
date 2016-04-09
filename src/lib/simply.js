@@ -107,13 +107,12 @@ class Simply {
     console.log(`- ${filepath}`);
 
     childProcess.exec(command, (error, stdout, stderr) => {
-      if (error) {
-        throw error;
-      }
-
       let output = stdout + stderr;
       if (output) {
         console.log(output.trim());
+      }
+      else if (error) {
+        throw error;
       }
 
       this._processFile();
