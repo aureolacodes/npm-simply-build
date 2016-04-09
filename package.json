@@ -1,13 +1,13 @@
 {
   "name": "simply-build",
-  "version": "0.0.1",
+  "version": "0.0.0",
   "description": "A simple npm task runner.",
   "main": "index.js",
   "bin": {
-    "simply": "./index.js"
+    "simply": "./src/index.js"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jshint ."
   },
   "repository": {
     "type": "git",

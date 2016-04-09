@@ -8,7 +8,7 @@
  */
 'use strict';
 
-const Simply = require('./../lib/simply.js');
+const Simply = require('./lib/simply.js');
 
 var config = require(process.cwd() + '/package.json');
 var tasksDir = config.simply ? config.simply.directory : 'tasks';
