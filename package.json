@@ -25,5 +25,6 @@
   "bugs": {
     "url": "https://github.com/aureolacodes/npm-simply-build/issues"
   },
-  "homepage": "https://github.com/aureolacodes/npm-simply-build#readme"
+  "homepage": "https://github.com/aureolacodes/npm-simply-build#readme",
+  "preferGlobal": true
 }
