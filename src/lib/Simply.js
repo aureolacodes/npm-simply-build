@@ -123,6 +123,9 @@ class Simply {
     if (filepath.substr(-3) === '.js') {
       command = 'node ' + filepath;
     }
+    else if (fs.lstatSync(filepath).isDirectory()) {
+      command = 'node ' + filepath;
+    }
     else {
       command = filepath;
     }
