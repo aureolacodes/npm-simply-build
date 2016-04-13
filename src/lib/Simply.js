@@ -70,6 +70,29 @@ class Simply {
   }
 
   /**
+   * Lists all registered groups and their tasks in execution order.
+   */
+  list() {
+    let results;
+    try {
+      results = fs.readdirSync(this._directory);
+      for (let i = 0, len = results.length; i < len; i++) {
+        console.log('- ' + results[i])
+
+        let tasks = fs.readdirSync(this._directory + '/' + results[i]);
+        for (let j = 0, len = tasks.length; j < len; j++) {
+          if (tasks[j][0] !== '.') {
+            console.log('-- ' + tasks[j]);
+          }
+        }
+      }
+    }
+    catch(error) {
+      throw error;
+    }
+  }
+
+  /**
    * Process the next file in the queue.
    *
    * Takes the next file from the files queue and pushes

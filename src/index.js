@@ -21,6 +21,12 @@ var simply = new Simply(process.cwd(), tasksDir);
 program
   .version(config.version)
   .usage('<group ...>')
+  .option('-l, --list', 'List registered task groups.')
   .parse(process.argv);
 
-simply.run(program.args[0] || null);
+if (program.list) {
+  simply.list();
+}
+else {
+  simply.run(program.args[0] || null);
+}
