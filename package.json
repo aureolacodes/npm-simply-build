@@ -26,5 +26,8 @@
     "url": "https://github.com/aureolacodes/npm-simply-build/issues"
   },
   "homepage": "https://github.com/aureolacodes/npm-simply-build#readme",
-  "preferGlobal": true
+  "preferGlobal": true,
+  "dependencies": {
+    "commander": "^2.9.0"
+  }
 }

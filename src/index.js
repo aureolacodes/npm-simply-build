@@ -8,10 +8,19 @@
  */
 'use strict';
 
-const Simply = require('./lib/simply.js');
+const program = require('commander');
+const config = require('../package.json');
 
-var config = require(process.cwd() + '/package.json');
-var tasksDir = config.simply ? config.simply.directory : 'tasks';
+const appCfg = require(process.cwd() + '/package.json');
+const tasksDir = appCfg.simply ? appCfg.simply.directory : 'tasks';
+
+const Simply = require('./lib/Simply.js');
 
 var simply = new Simply(process.cwd(), tasksDir);
-simply.run(process.argv[2] || null);
+
+program
+  .version(config.version)
+  .usage('<group ...>')
+  .parse(process.argv);
+
+simply.run(program.args[0] || null);
