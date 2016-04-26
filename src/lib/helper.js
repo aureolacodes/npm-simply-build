@@ -10,6 +10,33 @@ const fs = require('fs');
 const path = require('path');
 
 /**
+ * Returns the item type for a given file path.
+ *
+ * Possible item types are "task", "script", "config" or "binary". Depending
+ * on the type, the items will be handled differently by simply.
+ *
+ * @param {string} filepath
+ *   File path of the item in question.
+ *
+ * @return {string}
+ *   The item's type.
+ */
+function getItemType(filepath) {
+  let itemStat = fs.statSync(filepath);
+  if (itemStat && itemStat.isDirectory()) {
+    return 'task';
+  }
+  else if (filepath.match(/\.js$/i)) {
+    return 'script';
+  }
+  else if (filepath.match(/\.json$/i)) {
+    return 'config';
+  }
+
+  return 'binary';
+}
+
+/**
  * Returns an array of items inside the tasks directory.
  *
  * @param {string} tasksDir
@@ -36,39 +63,12 @@ function scanTasksDir(tasksDir, task) {
 
       results.push(item);
       if (item.type === 'task') {
-        results = results.concat(scanTasks(tasksDir, item.path));
+        results = results.concat(scanTasksDir(tasksDir, item.path));
       }
     }
   }
 
   return results;
-}
-
-/**
- * Returns the item type for a given file path.
- *
- * Possible item types are "task", "script", "config" or "binary". Depending
- * on the type, the items will be handled differently by simply.
- *
- * @param {string} filepath
- *   File path of the item in question.
- *
- * @return {string}
- *   The item's type.
- */
-function getItemType(filepath) {
-  let itemStat = fs.statSync(filepath);
-  if (itemStat && itemStat.isDirectory()) {
-    return 'task';
-  }
-  else if (filepath.match(/\.js$/i)) {
-    return 'script';
-  }
-  else if (filepath.match(/\.json$/i)) {
-    return 'config';
-  }
-
-  return 'binary';
 }
 
 module.exports = {
