@@ -15,10 +15,17 @@
   },
   "keywords": [
     "simply",
+    "simply build",
+    "simple",
     "task",
     "build",
     "compile",
-    "deploy"
+    "deploy",
+    "deployment",
+    "simple",
+    "task runner",
+    "script runner",
+    "build system"
   ],
   "author": "Chris Han <support@aureola.codes>",
   "license": "MIT",
