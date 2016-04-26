@@ -77,7 +77,7 @@ class Simply {
     try {
       results = fs.readdirSync(this._directory);
       for (let i = 0, len = results.length; i < len; i++) {
-        console.log('- ' + results[i])
+        console.log('- ' + results[i]);
 
         let tasks = fs.readdirSync(this._directory + '/' + results[i]);
         for (let j = 0, len = tasks.length; j < len; j++) {
