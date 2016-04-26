@@ -8,27 +8,27 @@ modular workflow for your basic everyday development tasks.
 
 ## Installation
 
-<pre>
+```
 npm install simply-build -g
-</pre>
+```
 
 ## Basic usage
 
 Execute a single task:
-<pre>
+```
 simply task
-</pre>
+```
 
 Chaining tasks together. Tasks run synchronously, so each task
 will wait for the previous one.
-<pre>
+```
 simply task1 task2 task3
-</pre>
+```
 
 Listing all available tasks:
-<pre>
+```
 simply --list
-</pre>
+```
 
 ## Description
 
@@ -40,15 +40,14 @@ subfolders will be executed by `simply`. Scripts will be executed in
 alphabetical order.
 
 So a basic setup might look like this:
-<pre>
+```
 ./tasks/compile/babelify.js
 ./tasks/compile/uglify.js
 ./tasks/test/jshint
-</pre>
+```
 
 This would define two tasks `compile` & `test`. To execute those tasks run
-`simply compile` or `simply test`. To chain multiple tasks together just do
-`simply test && simply compile`.
+`simply compile` or `simply test`.
 
 Scripts can be either Javascript files, shell scripts, binaries or anything
 else which is executable on your OS.
@@ -60,14 +59,14 @@ https://github.com/aureolacodes/npm-simply-build-example
 
 The following options can be added to your `package.json`:
 
-<pre>
+```
 {
   ...
   "simply": {
     "directory": "change/your/tasks/folder"
   }
 }
-</pre>
+```
 
 ## Development
 
