@@ -6,8 +6,14 @@
  */
 'use strict';
 
-const childProcess = require('child_process');
+const execSync = require('child_process').execSync;
 const fs = require('fs');
+const path = require('path');
+
+const helper = require('./helper');
+
+const getTasks = helper.getTasks;
+const scanTasksDir = helper.scanTasksDir;
 
 /**
  * Defines the Simply main class.
@@ -28,7 +34,7 @@ class Simply {
    */
   constructor(rootDir, tasksDir) {
     tasksDir = tasksDir || 'tasks';
-    this._directory = rootDir + '/' + tasksDir;
+    this._directory = path.join(rootDir, tasksDir);
   }
 
   /**
@@ -41,109 +47,121 @@ class Simply {
    * Passes all executable files to a function executing
    * each file after the other.
    *
-   *
-   * @param {string} task
-   *   Name of the task to execute.
+   * @param {Array} tasks
+   *   Names of the tasks we want to execute.
    */
-  run(task) {
-    if (!task || typeof task !== 'string') {
-      throw 'No task specified.';
+  run(tasks) {
+    tasks = tasks || [];
+    if (tasks.length === 0) {
+      console.log('No tasks specified.');
     }
 
-    console.log(`Simply running "${task}"...`);
+    for (let i = 0, len = tasks.length; i < len; i++) {
+      this.runTask(tasks[i]);
+    }
+  }
 
-    let taskDir = this._directory + '/' + task + '/';
-    fs.readdir(taskDir, (error, files) => {
-      if (error) {
-        throw error;
-      }
-
-      this._files = [];
-      for (let i = 0, len = files.length; i < len; i++) {
-        if (files[i][0] !== '.') {
-          this._files.push(taskDir + files[i]);
-        }
-      }
-
-      this._processFile();
-    });
+  /**
+   * Runs the task with the given name.
+   *
+   * @param {string} task
+   *   Name of the task.
+   */
+  runTask(task) {
+    let item = this._getTask(task);
+    if (!item) {
+      console.log(`Task ${task} not found.`);
+    }
+    else {
+      console.log(`Running task "${task}":`);
+      this._execTask(item);
+    }
   }
 
   /**
    * Lists all registered groups and their tasks in execution order.
    */
   list() {
-    let results;
-    try {
-      results = fs.readdirSync(this._directory);
-      for (let i = 0, len = results.length; i < len; i++) {
-        console.log('- ' + results[i]);
+    console.log('The following tasks are available:');
 
-        let tasks = fs.readdirSync(this._directory + '/' + results[i]);
-        for (let j = 0, len = tasks.length; j < len; j++) {
-          if (tasks[j][0] !== '.') {
-            console.log('-- ' + tasks[j]);
-          }
-        }
+    let tasks = getTasks(this._directory);
+    for (let i = 0, len = tasks.length; i < len; i++) {
+      console.log('-- ' + tasks[i].path);
+    }
+  }
+
+  /**
+   * Returns the requested task if found.
+   *
+   * @param {string} task
+   *   Name of the tasks as defined in list.
+   *
+   * @return {object|null}
+   *   Either task item or null, if not found.
+   *
+   * @private
+   */
+  _getTask(task) {
+    let tasks = getTasks(this._directory);
+    for (let i = 0, len = tasks.length; i < len; i++) {
+      if (tasks[i].path === task) {
+        return tasks[i];
       }
     }
-    catch(error) {
-      throw error;
-    }
+
+    return null;
   }
 
   /**
-   * Process the next file in the queue.
+   * Handles the execution of a given task item.
    *
-   * Takes the next file from the files queue and pushes
-   * it to an execution function.
+   * @param {object} item
+   *   A task item.
    *
    * @private
    */
-  _processFile() {
-    let filepath = this._files.shift();
-    if (!filepath) {
-      console.log('finished.');
-    }
-    else {
-      this._executeFile(filepath);
-    }
+  _execTask(item) {
+    let items = scanTasksDir(this._directory, item.path);
+    items.forEach(this._execItem.bind(this));
   }
 
   /**
-   * Executes the file with the given filepath.
+   * Handles the execution of a given item.
    *
-   * @param {string} filepath
-   *   Path of the file we want to execute.
+   * @param {object} item
+   *   Single item object.
    *
    * @private
    */
-  _executeFile(filepath) {
+  _execItem(item) {
+    let output;
     let command = '';
-    if (filepath.substr(-3) === '.js') {
-      command = 'node ' + filepath;
+
+    if (item.type === 'script') {
+      command = 'node ' + item.pathAbs;
     }
-    else if (fs.lstatSync(filepath).isDirectory()) {
-      command = 'node ' + filepath;
+    else if (item.type === 'binary') {
+      command = item.pathAbs;
     }
+
+    // Other items should not be executed.
     else {
-      command = filepath;
+      return;
     }
 
-    console.log(`- ${filepath}`);
+    console.log(`- ${item.pathAbs}`);
 
-    childProcess.exec(command, (error, stdout, stderr) => {
-      let output = stdout + stderr;
+    try {
+      output = execSync(command, {encoding: 'UTF-8'});
       if (output) {
-        console.log(output.trim());
+        console.log(output);
       }
-      else if (error) {
-        throw error;
-      }
-
-      this._processFile();
-    });
+    }
+    catch (error) {
+      console.log(error);
+    }
   }
+
 }
 
 module.exports = Simply;

@@ -22,7 +22,7 @@ const path = require('path');
  *   The item's type.
  */
 function getItemType(filepath) {
-  let itemStat = fs.statSync(filepath);
+  let itemStat = fs.lstatSync(filepath);
   if (itemStat && itemStat.isDirectory()) {
     return 'task';
   }
@@ -71,7 +71,23 @@ function scanTasksDir(tasksDir, task) {
   return results;
 }
 
+/**
+ * Returns all tasks located inside the task directory.
+ *
+ * @param {string} tasksDir
+ *   The tasks directory.
+ *
+ * @return {Array}
+ *   Array of task items.
+ */
+function getTasks(tasksDir) {
+  return scanTasksDir(tasksDir).filter(item => {
+    return item.type === 'task';
+  });
+}
+
 module.exports = {
+  getTasks: getTasks,
   scanTasksDir: scanTasksDir,
   getItemType: getItemType
 };

@@ -31,5 +31,5 @@ else if (program.args.length === 0) {
   console.log('Use "simply --list" to list available tasks.');
 }
 else {
-  simply.run(program.args[0] || null);
+  simply.run(program.args);
 }
