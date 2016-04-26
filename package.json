@@ -7,7 +7,7 @@
     "simply": "./src/index.js"
   },
   "scripts": {
-    "test": "jshint ."
+    "test": "jshint ./src"
   },
   "repository": {
     "type": "git",
