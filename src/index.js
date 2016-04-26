@@ -27,6 +27,9 @@ program
 if (program.list) {
   simply.list();
 }
+else if (program.args.length === 0) {
+  console.log('Use "simply --list" to list available tasks.');
+}
 else {
   simply.run(program.args[0] || null);
 }
