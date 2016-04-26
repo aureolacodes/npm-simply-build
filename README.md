@@ -14,13 +14,27 @@ npm install simply-build -g
 
 ## Basic usage
 
-I will give you a basic example how `simply` works.
-
+Execute a single task:
 <pre>
-simply &lt;task&gt;
+simply task
 </pre>
 
-All this tool does is simply search for directories in a folder `tasks`.
+Chaining tasks together. Tasks run synchronously, so each task
+will wait for the previous one.
+<pre>
+simply task1 task2 task3
+</pre>
+
+Listing all available tasks:
+<pre>
+simply --list
+</pre>
+
+## Description
+
+I will give you a basic overview how `simply` works.
+
+All this tool does is search for directories in a folder `tasks`.
 These folders represent your `tasks`. All scripts you put inside your
 subfolders will be executed by `simply`. Scripts will be executed in
 alphabetical order.
