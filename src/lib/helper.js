@@ -86,7 +86,23 @@ function getTasks(tasksDir) {
   });
 }
 
+/**
+ * Returns all config files located inside the task directory.
+ *
+ * @param {string} tasksDir
+ *   The tasks directory.
+ *
+ * @return {Array}
+ *   Array of config items.
+ */
+function getConfig(tasksDir) {
+  return scanTasksDir(tasksDir).filter(item => {
+    return item.type === 'config';
+  });
+}
+
 module.exports = {
+  getConfig: getConfig,
   getTasks: getTasks,
   scanTasksDir: scanTasksDir,
   getItemType: getItemType
