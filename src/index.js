@@ -22,10 +22,15 @@ program
   .version(config.version)
   .usage('<group ...>')
   .option('-l, --list', 'List registered task groups.')
+  .option('-i, --install', 'Installs all task dependencies.')
+  .option('-s, --save', 'Saves task dependencies to package.json.')
   .parse(process.argv);
 
-if (program.list) {
+if (program.list === true) {
   simply.list();
+}
+else if (program.install === true) {
+  simply.install(program.save);
 }
 else if (program.args.length === 0) {
   console.log('Use "simply --list" to list available tasks.');

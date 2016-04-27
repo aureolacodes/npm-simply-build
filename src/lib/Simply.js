@@ -8,10 +8,12 @@
 
 const execSync = require('child_process').execSync;
 const path = require('path');
+const fs = require('fs');
 
 const helper = require('./helper');
 
 const getTasks = helper.getTasks;
+const getConfig = helper.getConfig;
 const scanTasksDir = helper.scanTasksDir;
 
 /**
@@ -87,6 +89,73 @@ class Simply {
     for (let i = 0, len = tasks.length; i < len; i++) {
       console.log('-- ' + tasks[i].path);
     }
+  }
+
+  /**
+   * Installs all task dependencies.
+   *
+   * @param {bool} save
+   *   Dependencies will be stored in package.json if true.
+   */
+  install(save) {
+    console.log('Installing task dependencies...');
+
+    let suffix = save ? ' -D' : '';
+    let dependencies = this._getDependencies();
+    for (let key of Object.keys(dependencies)) {
+      try {
+        let command = `npm i ${key}@${dependencies[key]}${suffix}`;
+        console.log(command);
+
+        let output = execSync(command, {
+          encoding: 'UTF-8'
+        });
+
+        if (output) {
+          console.log(output);
+        }
+      }
+      catch (error) {
+        console.log(error);
+      }
+    }
+  }
+
+  /**
+   * Returns an object with all collected dependencies.
+   *
+   * @return {object}
+   *   Dependencies object.
+   *
+   * @private
+   */
+  _getDependencies() {
+    let dependencies = {};
+
+    let items = getConfig(this._directory);
+    for (let i = 0, len = items.length; i < len; i++) {
+      try {
+        let data = fs.readFileSync(items[i].pathAbs, 'utf8');
+        let config = JSON.parse(data);
+
+        if (config.dependencies) {
+          for (let key of Object.keys(config.dependencies)) {
+            dependencies[key] = config.dependencies[key];
+          }
+        }
+
+        if (config.devDependencies) {
+          for (let key of Object.keys(config.devDependencies)) {
+            dependencies[key] = config.devDependencies[key];
+          }
+        }
+      }
+      catch (error) {
+        console.log(error);
+      }
+    }
+
+    return dependencies;
   }
 
   /**
