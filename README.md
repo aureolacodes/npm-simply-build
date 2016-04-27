@@ -2,9 +2,14 @@
 
 ## Introduction
 
-`simply` is meant to be a helper tool for those, who don't need feature-rich tools
-like grunt, gulp and so on. It helps you create a simple and yet maintenable and
-modular workflow for your basic everyday development tasks.
+`simply` is meant to be a helper tool for creating a simple, yet maintainable
+and modular workflow for your basic everyday development tasks. Simply is
+modular by design, so sharing, adding or removing task is as simple as copying
+or removing a folder.
+
+The deployment process is divided into tasks. Tasks are represented by
+subfolders inside a customizable root directory. Tasks can define their own
+dependencies which are managed by simply using basic npm logic.
 
 ## Installation
 
@@ -54,6 +59,21 @@ else which is executable on your OS.
 
 Check the following repository for a basic example:<br />
 https://github.com/aureolacodes/npm-simply-build-example
+
+## Dependencies
+
+Every task can define it's own dependencies. Just create a .json file inside
+your task folder & add dependencies using the npm syntax.
+
+For convenience you may want to use `npm init` and `npm install` to manage
+dependencies per task. Install or update task dependencies using:
+
+```
+simply --install
+```
+
+Please note that there is currently no mechanism to deal with concurrent
+dependencies.
 
 ## Configuration
 
