@@ -10,6 +10,29 @@ const fs = require('fs');
 const path = require('path');
 
 /**
+ * Returns if the given file is a valid one.
+ *
+ * @param {string} filename
+ *   Name of the file.
+ *
+ * @return {bool}
+ *   True, if file can be added to list.
+ */
+function isValid(filename) {
+  // Hidden files should be skipped.
+  if (filename[0] === '.') {
+    return false;
+  }
+
+  // Skip readmes and text files.
+  if (filename.match(/\.(md|txt)$/i)) {
+    return false;
+  }
+
+  return true;
+}
+
+/**
  * Returns the item type for a given file path.
  *
  * Possible item types are "task", "script", "config" or "binary". Depending
@@ -55,7 +78,7 @@ function scanTasksDir(tasksDir, task) {
   let directory = path.join(tasksDir, task);
   let items = fs.readdirSync(directory);
   for (let i = 0, len = items.length; i < len; i++) {
-    if (items[i][0] !== '.') {
+    if (isValid(items[i])) {
       let item = {};
       item.path = path.join(task, items[i]);
       item.pathAbs = path.join(tasksDir, item.path);
