@@ -267,7 +267,7 @@ class Simply {
 
     let matches = filename.match(/\.([^\.]+)$/i);
     let extension = matches ? matches[1] : '';
-    
+
     if (this._config.extBinary.indexOf(extension) !== -1) {
       return 'binary';
     }
@@ -302,15 +302,21 @@ class Simply {
     let directory = path.join(tasksDir, task);
     let items = fs.readdirSync(directory);
     for (let i = 0, len = items.length; i < len; i++) {
-        let item = {};
-        item.path = path.join(task, items[i]);
-        item.pathAbs = path.join(tasksDir, item.path);
-        item.type = this._getItemType(item.pathAbs);
+      let itemPath = path.join(task, items[i]);
+      let itemPathAbs = path.join(tasksDir, itemPath);
 
-        results.push(item);
-        if (item.type === 'task') {
-          results = results.concat(this._scanTasksDir(tasksDir, item.path));
+      let itemType = this._getItemType(itemPathAbs);
+      if (itemType) {
+        results.push({
+          type: itemType,
+          path: itemPath,
+          pathAbs: itemPathAbs
+        });
+
+        if (itemType === 'task') {
+          results = results.concat(this._scanTasksDir(tasksDir, itemPath));
         }
+      }
     }
 
     return results;
