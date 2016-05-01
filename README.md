@@ -79,11 +79,21 @@ dependencies.
 
 The following options can be added to your `package.json`:
 
-```
+| Option | Default | Description |
+| --- | --- | --- |
+| directory | tasks | Defines the tasks directory. |
+| extBinary | ["","sh","bat","exe"] | Extensions of binary files. |
+| extScript | ["js"] | Extensions of script files. |
+| extConfig | ["json"] | Extensions of config files. |
+
+Example:
+```json
 {
-  ...
   "simply": {
-    "directory": "change/your/tasks/folder"
+    "directory": "change/your/tasks/folder",
+    "extBinary": ["","sh","bat","exe"],
+    "extScript": ["js"],
+    "extConfig": ["json"]
   }
 }
 ```
