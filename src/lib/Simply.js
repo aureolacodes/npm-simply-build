@@ -28,14 +28,28 @@ class Simply {
   /**
    * Sets up basic configuration of the class.
    *
-   * @param {string} rootDir
-   *   Directory the simply command is executed in.
-   * @param {string} tasksDir
-   *   Tasks directory, relative to the rootDir.
+   * @param {object} config
+   *   Object with configuration options. The following options are available:
+   *   - rootDir {string}
+   *     Root directory of the application.
+   *   - tasksDir {string}
+   *     Path to the tasks directory.
+   *   - extBinary {Array}
+   *     Array of extensions of binary files.
+   *   - extScript {Array}
+   *     Array of extensions of script files.
+   *   - extConfig {Array}
+   *     Array of extensions of config files.
    */
-  constructor(rootDir, tasksDir) {
-    tasksDir = tasksDir || 'tasks';
-    this._directory = path.join(rootDir, tasksDir);
+  constructor(config) {
+    config = config || {};
+    config.rootDir = config.rootDir || process.cwd();
+    config.tasksDir = config.tasksDir || 'tasks';
+    config.extBinary = config.extBinary || ['', 'sh', 'bat', 'exe'];
+    config.extScript = config.extScript || ['js'];
+    config.extConfig = config.extConfig || ['json'];
+
+    this._directory = path.join(config.rootDir, config.tasksDir);
   }
 
   /**

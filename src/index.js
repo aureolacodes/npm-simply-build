@@ -10,13 +10,10 @@
 
 const program = require('commander');
 const config = require('../package.json');
-
 const appCfg = require(process.cwd() + '/package.json');
-const tasksDir = appCfg.simply ? appCfg.simply.directory : 'tasks';
-
 const Simply = require('./lib/Simply.js');
 
-var simply = new Simply(process.cwd(), tasksDir);
+var simply = new Simply(appCfg.simply);
 
 program
   .version(config.version)
